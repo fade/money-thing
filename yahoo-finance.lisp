@@ -1,6 +1,6 @@
 ;; -*-lisp-*-
 (defpackage :yahoo-finance
-            (:use :cl)
+            (:use :clim-lisp)
             (:use :yahoo-finance.app-utils)
             (:export :-main))
 
@@ -122,6 +122,10 @@
                        :price-hint (cdr (assoc  "priceHint" ticker-info :test #'equal))
                        :timestamps (mapcar #'local-time:unix-to-timestamp timestamps))))))
 
+(defun parse-ticker-as-hash (body)
+  "Given a JSON body, parse it with jonathan, but step through the parse in the debugger."
+  (jonathan:parse body :as :hash-table :junk-allowed t))
+
 (defun decode-ticker (ticker)
   (let* ((tick (string-upcase ticker))
          (url (format nil "~A/v8/finance/chart/~A" *base-url* tick)))
@@ -129,7 +133,7 @@
         (dex:get url)
       (declare (ignorable body status response-headers uri stream))
       (format t "~&URL: ~A" url)
-      (let* ((data (jonathan:parse body :as :hash-table))
+      (let* ((data (parse-ticker-as-hash body))
              (result (first (gethash "result" (gethash "chart" data))))
              (ticker-info (gethash "meta" result)) 
              (timestamps (gethash "timestamp" result)) ;; this is a list

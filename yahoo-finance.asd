@@ -15,7 +15,8 @@
                :alexandria
                :jonathan
                :jsown
-               :local-time)
+               :local-time
+               :mcclim)
   :pathname "./"
   :components ((:file "app-utils")
                (:file "yahoo-finance")))
