@@ -2,3 +2,4 @@
 /quicklisp-manifest.txt
 /slime.lisp
 /yaf
+/config.lisp
