@@ -7,7 +7,6 @@
   :license "Modified BSD License"
   ;; :class :package-inferred-system 
   :serial t
-
   :depends-on (:dexador
                :cl-ppcre
                :cl-strings
