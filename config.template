@@ -1,0 +1,9 @@
+;; finnhub API auth
+
+(defparameter *finnhub-api-key* "")
+
+;; finnhub sandbox API auth
+(defparameter *sandbox-api-key* "")
+
+;; finnhub webhook
+(defparameter *finnhub-webhook-secret* "")
