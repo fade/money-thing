@@ -129,10 +129,11 @@
 (defun decode-ticker (ticker)
   (let* ((tick (string-upcase ticker))
          (url (format nil "~A/v8/finance/chart/~A" *base-url* tick)))
+    
     (multiple-value-bind (body status response-headers uri stream)
         (dex:get url)
       (declare (ignorable body status response-headers uri stream))
-      (format t "~&URL: ~A" url)
+      (format t "~&[[~A]]" url)
       (let* ((data (parse-ticker-as-hash body))
              (result (first (gethash "result" (gethash "chart" data))))
              (ticker-info (gethash "meta" result)) 
