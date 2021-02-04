@@ -7,15 +7,17 @@
   :license "Modified BSD License"
   ;; :class :package-inferred-system 
   :serial t
-  :depends-on (:dexador
+  :depends-on (:alexandria
+               :cl-json-pointer
                :cl-ppcre
                :cl-strings
-               :rutils
-               :alexandria
+               :dexador
                :jonathan
                :jsown
                :local-time
-               :mcclim)
+               :mcclim
+               :rutils
+               :vellum)
   :pathname "./"
   :components ((:file "app-utils")
                (:file "yahoo-finance")))
