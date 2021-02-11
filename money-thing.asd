@@ -1,8 +1,9 @@
 ;; -*-lisp-*-
-;;;; yahoo-finance.asd
+;;;; money-thing.asd
 
-(asdf:defsystem #:yahoo-finance
-  :description "An interface to the vestigal JSON machinery at Yahoo Finance."
+(asdf:defsystem #:money-thing
+  :description "A system to facilitate financial analysis of stocks,
+  and stock trading positions."
   :author "Brian O'Reilly <fade@deepsky.com>"
   :license "Modified BSD License"
   ;; :class :package-inferred-system 
@@ -11,14 +12,21 @@
                :cl-json-pointer
                :cl-ppcre
                :cl-strings
+               :quri
                :dexador
                :jonathan
                :jsown
                :local-time
                :mcclim
                :rutils
-               :vellum)
+               :vellum
+               :cl-yesql
+               :cl-yesql/postmodern)
   :pathname "./"
   :components ((:file "app-utils")
-               (:file "yahoo-finance")))
+               (:file "packages")
+               (:file "config")
+               (:file "money-thing")
+               ;; (:file "db")
+               ))
 

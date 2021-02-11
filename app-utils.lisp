@@ -1,11 +1,11 @@
 ;; -*-lisp-*-
 
-(defpackage :yahoo-finance.app-utils
+(defpackage :money-thing.app-utils
   (:use :cl)
   (:export :internal-disable-debugger)
   (:export :internal-quit))
 
-(in-package :yahoo-finance.app-utils)
+(in-package :money-thing.app-utils)
   
 (defun internal-disable-debugger ()
   (labels
@@ -38,3 +38,20 @@
         kcl scl openmcl mcl abcl ecl)
 
   (error 'not-implemented :proc (list 'quit code))) 
+
+;;; filename/path utilities
+
+(defun make-pathname-in-homedir (fname)                                                                                                                                    
+  "Return a pathname relative to the user's home directory."
+  (merge-pathnames                                                                                                                                                         
+   fname                                                                                                                                                                   
+   (make-pathname :directory                                                                                                                                               
+                  (pathname-directory                                                                                                                                      
+                   (user-homedir-pathname)))))                                                                                                                             
+                                                                                                                                                                           
+(defun make-pathname-in-lisp-subdir (fname)                                                                                                                                
+  "Return a pathname relative to the Lisp source code subtree in the
+user's home directory."
+  (merge-pathnames                                                                                                                                                         
+   fname                                                                                                                                                                   
+   (make-pathname-in-homedir "SourceCode/lisp/"))) 

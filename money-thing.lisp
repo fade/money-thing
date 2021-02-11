@@ -1,18 +1,10 @@
 ;; -*-lisp-*-
-(defpackage :yahoo-finance
-            (:use :clim-lisp)
-            (:use :yahoo-finance.app-utils)
-            (:export :-main))
+;; (defpackage :money-thing
+;;             (:use :clim-lisp)
+;;             (:use :money-thing.app-utils)
+;;             (:export :-main))
 
-(in-package :yahoo-finance)
-
-;;========== setup ===========
-
-(defvar *base-url* "https://query1.finance.yahoo.com")
-
-(defvar *scrape-url* "https://finance.yahoo.com/quote")
-
-;;========= /setup ===========
+(in-package :money-thing)
 
 ;;; Destructuring the JSON returned by yahoo has proven to be a real
 ;;; bastard. There are a lot of test functions here that won't live to
@@ -202,6 +194,7 @@ ol to represent."))
    (period-opens :initarg :period-opens :initform nil :accessor period-opens)
    (period-lows :initarg :period-lows :initform nil :accessor period-lows)
    (period-highs :initarg :period-highs :initform nil :accessor period-highs)
+   (period-closes :initarg :period-closes :initform nil :accessor period-closes)
    (period-volumes :initarg :period-volumes :initform nil :accessor period-volumes)
    (period-instant-data :initarg :period-instant-data :initform nil
                         :accessor period-instant-data

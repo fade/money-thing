@@ -1,7 +1,7 @@
 ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-PACKAGE=yahoo-finance
-PACKAGEUTILS=yahoo-finance.app-utils
-OUT=yaf
+PACKAGE=money-thing
+PACKAGEUTILS=money-thing.app-utils
+OUT=mt
 ENTRY=-main
 
 $(OUT): buildapp *.lisp quicklisp-manifest.txt
