@@ -3,3 +3,5 @@
 /slime.lisp
 /yaf
 /config.lisp
+/*.json
+/stocks.sql
