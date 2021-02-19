@@ -65,11 +65,11 @@ reinitialise them."
 ;;; representing the stocks known to finnhub which we have just looked
 ;;; up, and save those objects in a lisp list, iterating over the
 ;;; objects in that list afterward and attempting to save each one
-;;; will throw an error because the id collumn in the db is not
-;;; supposed to be null, and the slot is unbound at creation time. If
-;;; you create the dao object, and immediately pass it to
-;;; #'pomo:save-dao, the id serial number is created and the save
-;;; succeeds.
+;;; will throw an error because the id column in the db is a serial
+;;; type and is not supposed to be null, and the slot is unbound at
+;;; creation time. If you create the dao object, and immediately pass
+;;; it to #'pomo:save-dao, the id serial number is created and the
+;;; save succeeds.
 (defun make-stock-objects (stocklist)
   "given a list of stock metadata of the form '(symbol description
   type currency) create a database access object representing the
