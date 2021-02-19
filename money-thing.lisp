@@ -1,37 +1,7 @@
 ;; -*-lisp-*-
-;; (defpackage :money-thing
-;;             (:use :clim-lisp)
-;;             (:use :money-thing.app-utils)
-;;             (:export :-main))
 
 (in-package :money-thing)
 
-;;; Destructuring the JSON returned by yahoo has proven to be a real
-;;; bastard. There are a lot of test functions here that won't live to
-;;; see use beyond debugging the data structure returned from the
-;;; remote endpoint.
-
-(defun test-get-list (ticker)
-  (let* ((tick (string-upcase ticker))
-         (url (format nil "~A/v8/finance/chart/~A" *base-url* tick)))
-    (multiple-value-bind (body status response-headers uri stream)
-        (dex:get url)
-      (declare (ignorable body status response-headers uri stream))
-      (format t "~&URL: ~A" url)
-      ;; (values body status response-headers uri stream)
-      ;; (jsown:val (jsown:val *kk* "chart") "result")
-      (let* ((data (jsown:parse body))
-             (result (jsown:val (jsown:val data "chart") "result"))
-             ;; (indicators (jsown:val result "indicators"))
-             ;; (high   (jsown:val indicators "high"))
-             ;; (close  (jsown:val indicators "close"))
-             ;; (low    (jsown:val indicators "low"))
-             ;; (volume (jsown:val indicators "volume"))
-             ;; (open   (jsown:val indicators "open"))
-             )
-        ;; (declare (ignore result))
-        ;; (values high close low volume open)
-        (values result)))))
 
 (defun raw-json (ticker)
   (let* ((tick (string-upcase ticker))
@@ -220,6 +190,10 @@ ol to represent."))
   ;;         (error tick)
   ;;         (matrix-error-line tick))
   (call-next-method))
+
+(defmethod print-period-instant-data ((tick ticker) stream)
+  (loop for slitch in (period-instant-data tick)
+        do (format stream "~&[[ ~{~A~^ ~}]]" slitch)))
 
 (defun -main (&optional args)
   (format t "~a~%" "I don't do much yet"))
