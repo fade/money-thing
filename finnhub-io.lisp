@@ -1,5 +1,11 @@
 (in-package :money-thing)
 
+;;; this section is all about finding a fairly complete database of
+;;; traded companies in world exchanges. Finnhub seems to have
+;;; complete data for the NYSE and the Nasdaq. Notably the Toronto
+;;; Stock Exchange has a query code parameter, but only returns a
+;;; handful of ETFs.
+
 (defparameter *getreturn* nil)
 
 (defun dump-json-to-file (filename)
@@ -10,7 +16,7 @@
                                 (exchange "US")
                                 (token *finnhub-api-key*)
                                 (user-agent *user-agent*))
-  "Get the list of all known stocks from the finnhub finance API.
+  "Get the list of all known stocks from the finnhub finance API for the indicated exchange.
   returned as a JSON output."
   ;; https://finnhub.io/api/v1/stock/symbol?exchange=US&token=bp0nv9frh5r9fdeib5h0
   (let* ((request (quri:make-uri :defaults endpoint
@@ -40,9 +46,10 @@
            (get-by-json-pointer obj (format nil "/~A/type" i))
            (get-by-json-pointer obj (format nil "/~A/currency" i))))))
 
-(defun populate-finnhub-sources ()
+(defun populate-finnhub-sources (&key (exchange "US"))
   "Get a list of all known stock issues from finnhub.io, and save the
 data to our database."
-  (let* ((stock-metadata (finnhub-stocklist-json->data :jsource (get-known-stock-symbols)))
+  (let* ((stock-metadata (finnhub-stocklist-json->data
+                          :jsource (get-known-stock-symbols :exchange exchange)))
          (metadata-list (make-stock-objects stock-metadata)))
     (values metadata-list)))
