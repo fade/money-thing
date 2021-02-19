@@ -61,25 +61,24 @@ reinitialise them."
         (postmodern:save-dao dao))))
 
 
-;;; this is an interesting thing. if you create the dao objects
-;;; representing the stocks known to finnhub which we have just looked
-;;; up, and save those objects in a lisp list, iterating over the
-;;; objects in that list afterward and attempting to save each one
-;;; will throw an error because the id column in the db is a serial
-;;; type and is not supposed to be null, and the slot is unbound at
-;;; creation time. If you create the dao object, and immediately pass
-;;; it to #'pomo:save-dao, the id serial number is created and the
-;;; save succeeds.
+;;; this is an interesting thing. if you create the dao objects and
+;;;  save those objects in a lisp list, iterating over the objects in
+;;;  that list afterward and attempting to save each one will throw an
+;;;  error because the id column in the db is a serial type and is not
+;;;  supposed to be null, and the slot is unbound at creation time. If
+;;;  you create the dao object, and immediately pass it to
+;;;  #'pomo:save-dao, the id serial number is created and the save
+;;;  succeeds. This weird behaviour hung me up for a long time.
 (defun make-stock-objects (stocklist)
   "given a list of stock metadata of the form '(symbol description
   type currency) create a database access object representing the
   issue."
   (loop for (symbol description type currency) in stocklist
-        ; the last entry in the list contains nil data, so check:
+                                        ; the last entry in the list contains nil data, so check:
         if (and symbol description type currency)
           :do (format t "~&[ Creating: ~A ][ ~{~A ~^| ~} ]" symbol (list symbol description type currency))
-          :do
-             (let ((dao 
-                     (make-stock symbol description type currency)))
-               (save-dao dao))))
+        :do
+           (let ((dao 
+                   (make-stock symbol description type currency)))
+             (save-dao dao))))
 
