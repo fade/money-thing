@@ -2,7 +2,6 @@
 
 (in-package :money-thing)
 
-
 (defun raw-json (ticker)
   (let* ((tick (string-upcase ticker))
          (url (format nil "~A/v8/finance/chart/~A" *base-url* tick)))
@@ -26,31 +25,6 @@
 
           ;; (values high close low volume open)
           (values ticker-info timestamps indicators))))) ;;timestamps indicators
-
-(defun yfin-data-hashtable (ticker)
-  "input debugging."
-  (let* ((tick (string-upcase ticker))
-         (url (format nil "~A/v8/finance/chart/~A" *base-url* tick)))
-    (multiple-value-bind (body  status response-headers url stream)
-        (dex:get url)
-      (declare (ignorable body  status response-headers url stream))
-      (format t "~&URL: ~A~2%" url)
-      (jonathan:parse body :as :hash-table))))
-
-(defun bleurg (ticker)
-  (let* ((tick (string-upcase ticker))
-         (url (format nil "~A/v8/finance/chart/~A" *base-url* tick)))
-    (multiple-value-bind (body status response-headers uri stream)
-        (dex:get url)
-      (declare (ignorable body status response-headers uri stream))
-      (format t "~&URL: ~A" url)
-      (let* ((data (jsown:parse body))
-             (result (first (jsown:val (jsown:val data "chart") "result")))
-             (ticker-info (nthcdr 2 (first (nthcdr 1 result))))
-             (timestamps (nthcdr 1 (first (nthcdr 2 result))))
-             (indicators (cdr (second (third  (first (nthcdr 3 result))))))
-             (current-trading-period (first (nthcdr 14 result))))
-        (values result)))))
 
 (defun decode-ticker-jsown (ticker)
   "decode json return from yahoo finance endpoint"
@@ -85,7 +59,7 @@
                        :timestamps (mapcar #'local-time:unix-to-timestamp timestamps))))))
 
 (defun parse-ticker-as-hash (body)
-  "Given a JSON body, parse it with jonathan, but step through the parse in the debugger."
+  "Given a JSON body, parse it with jonathan, returning a hash-table."
   (jonathan:parse body :as :hash-table :junk-allowed t))
 
 (defun decode-ticker (ticker)
@@ -122,7 +96,8 @@
                         :scale (gethash "scale" ticker-info)
                         :price-hint (gethash "priceHint" ticker-info)
                         :timestamps (mapcar #'local-time:unix-to-timestamp timestamps)
-                        :indicators indicators                   
+                        :indicators indicators
+                        :period-closes (gethash "close" indicators)
                         :period-lows (gethash "low" indicators)
                         :period-highs (gethash "high" indicators)
                         :period-opens (gethash "open" indicators)
