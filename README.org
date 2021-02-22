@@ -1,0 +1,16 @@
+* Purpose
+
+This package should be a swiss knife for building automated trading
+bots in Common Lisp. At present, it is draws all of its information
+from publically accessilble sources, namely the still extant but
+existentially tenuous yahoo finance, the free (but requiring
+registration) API offered by finnhub.io, and most recently, the alpaca
+trading API. Alpaca doesn't really offer service to people outside the
+United States, which is a pain in the ass, because their service is
+well documented, and their APIs are solid. Ultimately, I'm probably
+going to use this collection with Interactive Brokers, which operate
+all over the world, but specifically in Canada where I am located.
+
+I will be adding support for various API's as I move along scratching
+my own itches. I'd like to get the yahoo finance support to parity
+with the yfinance python module built to their API.
