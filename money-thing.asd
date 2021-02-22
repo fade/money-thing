@@ -32,7 +32,8 @@
                (:file "packages")
                (:file "config")
                (:file "money-thing")
-               (:file "finnhub-io")
+               (:module :data-access
+                        :components ((:file "finnhub-io")))
                (:module :db
                 :components ((:file "db")))))
 
