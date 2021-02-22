@@ -5,3 +5,7 @@
 /config.lisp
 /*.json
 /stocks.sql
+/mt
+/lisp.Dockerfile
+/db/testdb.lisp
+/*.py
