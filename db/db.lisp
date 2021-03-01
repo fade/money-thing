@@ -41,8 +41,7 @@
   (make-instance 'stock :symbol symbol
                         :description description
                         :currency currency
-                        :type type
-                        ))
+                        :type type))
 
 (defun zero-tables ()
   "drop the stock and tick-data tables from the database, and
