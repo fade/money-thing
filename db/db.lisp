@@ -53,14 +53,15 @@ reinitialise them."
   (execute (dao-table-definition 'stock))
   (execute (dao-table-definition 'tick-data)))
 
-(defun insert-stock-objects (dao-list)
-  (dolist (dao dao-list)
-    (if (stock-id dao)
-        (postmodern:update-dao dao)
-        (postmodern:save-dao dao))))
+;; this doesn't work, see following commentary.
+;; (defun insert-stock-objects (dao-list)
+;;   (dolist (dao dao-list)
+;;     (if (stock-id dao)
+;;         (postmodern:update-dao dao)
+;;         (postmodern:save-dao dao))))
 
 
-;;; this is an interesting thing. if you create the dao objects and
+;;;  This is an interesting thing. if you create the dao objects and
 ;;;  save those objects in a lisp list, iterating over the objects in
 ;;;  that list afterward and attempting to save each one will throw an
 ;;;  error because the id column in the db is a serial type and is not

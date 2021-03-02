@@ -11,8 +11,9 @@
    (gmtoffset :initarg :gmtoffset :initform 0 :accessor gmtoffset)))
 
 (defclass ticker ()
-  ((symbol :initarg :symbol :initform (error "ticker needs a symb
-ol to represent."))
+  ((symbol :initarg :symbol
+           :initform (error "ticker needs a symbol to represent.")
+           :reader ticker-symbol)
    (pricing-currency :initarg :pricing-currency :initform nil :initarg :pcof)
    (exchange-name :initarg :exchange-name :initform nil :accessor exchange-name)
    (instrument-type :initarg :instrument-type :initform nil :accessor instrument-type)
@@ -45,6 +46,8 @@ ol to represent."))
   for a given stock in a given period, defaulting to one day."))
 
 (defmethod initialize-instance :after ((tick ticker) &key)
+  "Turn the returned timestamps returned from yahoo finance into
+local-time timestamps which we can calculate with."
   (setf (first-trade-date tick) (local-time:unix-to-timestamp (first-trade-date tick))
         (regular-market-time tick) (local-time:unix-to-timestamp (regular-market-time tick))
         (current-trading-period tick) (make-instance 'trading-period
