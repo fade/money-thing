@@ -59,12 +59,12 @@ local-time timestamps which we can calculate with."
                                            (period-lows tick) (period-highs tick)
                                            (period-volumes tick))))
 
-(defmethod print-object ((tick ticker) stream)
-  ;; (format stream "~@[L~A ~]~S~@[: ~S~]"
-  ;;         nil
-  ;;         (error tick)
-  ;;         (matrix-error-line tick))
-  (call-next-method))
+;; (defmethod print-object ((tick ticker) stream)
+;;   (format stream "~@[L~A ~]~S~@[: ~S~]"
+;;           nil
+;;           (error tick)
+;;           (matrix-error-line tick))
+;;   (call-next-method))
 
 (defmethod print-period-instant-data ((tick ticker) stream)
   (loop for slitch in (period-instant-data tick)

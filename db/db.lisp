@@ -1,6 +1,5 @@
 (in-package :money-thing)
 
-;; this shouldn't be here except at the REPL.
 (postmodern:connect-toplevel "moneything" "moneything" "657483" "localhost")
 
 (setf cl-postgres:*sql-readtable*
@@ -74,11 +73,11 @@ reinitialise them."
   type currency) create a database access object representing the
   issue."
   (loop for (symbol description type currency) in stocklist
-                                        ; the last entry in the list contains nil data, so check:
+        ; the last entry in the list contains nil data, so check:
         if (and symbol description type currency)
-          :do (format t "~&[ Creating: ~A ][ ~{~A ~^| ~} ]" symbol (list symbol description type currency))
         :do
            (let ((dao 
                    (make-stock symbol description type currency)))
+             (format t "~&[ Creating: ~A ][ ~{~A ~^| ~} ]" symbol (list symbol description type currency))
              (save-dao dao))))
 

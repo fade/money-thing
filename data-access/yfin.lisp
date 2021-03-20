@@ -25,7 +25,7 @@
           (values ticker-info timestamps indicators))))) ;;timestamps indicators
 
 (defun decode-ticker-jsown (ticker)
-  "decode json return from yahoo finance endpoint"
+  "decode json returned from yahoo finance endpoint. return a ticker object."
   (let* ((tick (string-upcase ticker))
          (url (format nil "~A/v8/finance/chart/~A" *base-url* tick)))
     (multiple-value-bind (body status response-headers uri stream)
