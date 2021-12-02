@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y build-essential redis-server sqlite3 \
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 
 RUN apt-get install -y nodejs && npm install wscat
+RUN apt-get install sbcl
 
 # download and build TA-Lib
 RUN wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz && \
@@ -28,5 +29,6 @@ RUN rm -R ta-lib ta-lib-0.4.0-src.tar.gz
 # docker file here, because of a failure when the latest version was
 # called down from the docker-compose.yml configuration. RUN pip3
 
-# install --upgrade --no-binary numpy==1.18.1 numpy==1.18.1 \ && pip3
+install --upgrade --no-binary numpy==1.18.1 numpy==1.18.1 \ && pip3
+
 # install -r requirements.txt
