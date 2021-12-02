@@ -2,7 +2,7 @@
   (:nicknames :$-thing)
   (:use :clim-lisp
    :cl-json-pointer
-   :postmodern)
+        :postmodern)
   (:use :money-thing.app-utils)
 
   (:export

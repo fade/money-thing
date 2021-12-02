@@ -46,7 +46,7 @@
   for a given stock in a given period, defaulting to one day."))
 
 (defmethod initialize-instance :after ((tick ticker) &key)
-  "Turn the returned timestamps returned from yahoo finance into
+  "Turn the timestamps returned from yahoo finance into
 local-time timestamps which we can calculate with."
   (setf (first-trade-date tick) (local-time:unix-to-timestamp (first-trade-date tick))
         (regular-market-time tick) (local-time:unix-to-timestamp (regular-market-time tick))
