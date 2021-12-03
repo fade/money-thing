@@ -60,14 +60,25 @@
   "Given a JSON body, parse it with jonathan, returning a hash-table."
   (jonathan:parse body :as :hash-table :junk-allowed t))
 
-(defun decode-ticker (ticker)
+(defun get-chart (ticker &optional start end)
   (let* ((tick (string-upcase ticker))
          (url (format nil "~A/v8/finance/chart/~A" *base-url* tick)))
-    
+    (format t "~&~A~%" url)
+    (multiple-value-bind (body status response-headers uri stream)
+        (dex:get url)
+      (declare (ignorable body status response-headers uri stream))
+      (parse-ticker-as-hash body))))
+
+(defun decode-ticker (ticker &optional start end)
+  (declare (ignorable start end))
+  (let* ((tick (string-upcase ticker))  
+         (url (format nil "~A/v8/finance/chart/~A" *base-url* tick)))
+
     (multiple-value-bind (body status response-headers uri stream)
         (dex:get url)
       (declare (ignorable body status response-headers uri stream))
       (format t "~&[[~A]]" url)
+
       (let* ((data (parse-ticker-as-hash body))
              (result (first (gethash "result" (gethash "chart" data))))
              (ticker-info (gethash "meta" result)) 
@@ -100,8 +111,4 @@
                         :period-highs (gethash "high" indicators)
                         :period-opens (gethash "open" indicators)
                         :period-volumes (gethash "volume" indicators)))))))
-
-
-
-
 
