@@ -9,3 +9,4 @@
 /lisp.Dockerfile
 /db/testdb.lisp
 /*.py
+*.fasl
