@@ -41,7 +41,7 @@
    (period-volumes :initarg :period-volumes :initform nil :accessor period-volumes)
    (period-instant-data :initarg :period-instant-data :initform nil
                         :accessor period-instant-data
-                        :documentation "lists of the form: (timestamp open low high volume)"))
+                        :documentation "lists of the form: (timestamp open high low close volume)"))
   (:documentation "An object that holds the metadata and pricing data
   for a given stock in a given period, defaulting to one day."))
 
@@ -56,7 +56,7 @@ local-time timestamps which we can calculate with."
                                                      :end-of (local-time:unix-to-timestamp (gethash "end" (current-trading-period tick)))
                                                      :gmtoffset (gethash "gmtoffset" (current-trading-period tick)))
         (period-instant-data tick) (mapcar #'list (timestamps tick) (period-opens tick)
-                                           (period-lows tick) (period-highs tick)
+                                           (period-highs tick) (period-lows tick) (period-closes tick)
                                            (period-volumes tick))))
 
 ;; (defmethod print-object ((tick ticker) stream)
@@ -66,9 +66,22 @@ local-time timestamps which we can calculate with."
 ;;           (matrix-error-line tick))
 ;;   (call-next-method))
 
+(defgeneric print-period-instant-data (ticker stream)
+  (:documentation "Given a ticker object containing a slot :period-instant-data print the instant data in a moderately human readable form to stream."))
+
 (defmethod print-period-instant-data ((tick ticker) stream)
   (loop for slitch in (period-instant-data tick)
         do (format stream "~&[[ ~{~A~^ ~}]]" slitch)))
+
+(defun get-arbitrary-thing (symbol thinglist)
+  (let* ((url (format nil "https://query1.finance.yahoo.com/v11/finance/quoteSummary/~A?modules=~{~A~^,~}"
+                      (string-upcase symbol) thinglist)))
+    (multiple-value-bind (body status response-headers uri stream)
+        (dex:get url)
+      (declare (ignorable body status response-headers uri stream))
+      (format t "~&URL: ~A~%" url)
+      (let* ((data (jsown:parse body)))
+        (values data)))))
 
 (defun -main (&optional args)
   (format t "~a~%" "I don't do much yet"))
