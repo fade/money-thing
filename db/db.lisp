@@ -1,6 +1,7 @@
 (in-package :money-thing)
 
-(postmodern:connect-toplevel "moneything" "moneything" "657483" "localhost")
+;;                           :database  :username  :password      :host
+(postmodern:connect-toplevel "marketdb" "tradekit" "yourpassword" "localhost")
 
 (setf cl-postgres:*sql-readtable*
       (cl-postgres:copy-sql-readtable
@@ -9,13 +10,14 @@
 ;;; stock and stock price data.
 
 (defclass stock ()
-  ((id :initarg :id :accessor stock-id :col-type integer :col-identity t)
+  ((id :initarg :id :accessor stock-id :col-type serial :col-identity t)
    (symbol :initarg :symbol :accessor stock-symbol :col-type text)
-   (description :initarg :description :accessor stock-description :col-type text)
-   (currency :initarg :currency :accessor stock-currency :col-type text)
-   (type :initarg :type :accessor stock-type :col-type text))
+   (name :initarg :name :accessor stock-name :col-type text)
+   (exchange :initarg :exchange :accessor stock-exchange :col-type text)
+   (type :initarg :type :accessor stock-type :col-type text)
+   (is-etf :initarg :etf? :accessor is-etf? :col-type boolean :initform nil))
   (:documentation "records the name of the company, the symbol of the
-  issue, the currency of record, and the type of issue.")
+  issue, the exchange of record, and the type of issue.")
   (:metaclass postmodern:dao-class)
   (:table-name stock)
   (:keys id))
@@ -34,12 +36,12 @@
   (:table-name tick_data)
   (:keys id stock-id))
 
-(defun make-stock (symbol description type currency)
+(defun make-stock (symbol name type exchange)
   "Given the metadata for a traded issue, return a DAO object
   containing that data."
   (make-instance 'stock :symbol symbol
-                        :description description
-                        :currency currency
+                        :name name
+                        :exchange exchange
                         :type type))
 
 (defun zero-tables ()
@@ -61,15 +63,15 @@ reinitialise them."
 ;;;  #'pomo:save-dao, the id serial number is created and the save
 ;;;  succeeds. This weird behaviour hung me up for a long time.
 (defun make-stock-objects (stocklist)
-  "given a list of stock metadata of the form '(symbol description
-  type currency) create a database access object representing the
+  "given a list of stock metadata of the form '(symbol name
+  type exchange) create a database access object representing the
   issue."
-  (loop for (symbol description type currency) in stocklist
-        ; the last entry in the list contains nil data, so check:
-        if (and symbol description type currency)
-        :do
-           (let ((dao 
-                   (make-stock symbol description type currency)))
-             (format t "~&[ Creating: ~A ][ ~{~A ~^| ~} ]" symbol (list symbol description type currency))
-             (save-dao dao))))
+  (loop for (symbol name type exchange) in stocklist
+                                        ; the last entry in the list contains nil data, so check:
+        if (and symbol name type exchange)
+          :do
+             (let ((dao 
+                     (make-stock symbol name type exchange)))
+               (format t "~&[ Creating: ~A ][ ~{~A ~^| ~} ]" symbol (list symbol name type exchange))
+               (save-dao dao))))
 

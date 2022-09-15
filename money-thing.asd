@@ -38,4 +38,3 @@
                              (:file "finnhub-io")))
                (:module :db
                 :components ((:file "db")))))
-

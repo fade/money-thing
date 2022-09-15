@@ -41,17 +41,12 @@
 
 ;;; filename/path utilities
 
-(defun make-pathname-in-homedir (fname)                                                                                                                                    
+(defun make-pathname-in-homedir (fname)
   "Return a pathname relative to the user's home directory."
-  (merge-pathnames                                                                                                                                                         
-   fname                                                                                                                                                                   
-   (make-pathname :directory                                                                                                                                               
-                  (pathname-directory                                                                                                                                      
-                   (user-homedir-pathname)))))                                                                                                                             
-                                                                                                                                                                           
-(defun make-pathname-in-lisp-subdir (fname)                                                                                                                                
-  "Return a pathname relative to the Lisp source code subtree in the
-user's home directory."
-  (merge-pathnames                                                                                                                                                         
-   fname                                                                                                                                                                   
-   (make-pathname-in-homedir "SourceCode/lisp/"))) 
+  (merge-pathnames fname (make-pathname :directory (pathname-directory (user-homedir-pathname)))))
+
+
+(defun make-pathname-in-lisp-subdir (fname)
+  "Return a pathname relative to the Lisp source code subtree in the user's home directory."
+  (merge-pathnames fname (make-pathname-in-homedir "SourceCode/lisp/")))
+
